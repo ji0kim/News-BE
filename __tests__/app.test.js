@@ -28,7 +28,7 @@ describe('topics', () => {
 	});
 	test('404 /api/*', () => {
 		return request(app)
-			.get('*')
+			.get('/*')
 			.expect(404)
 			.then((response) => {
 				expect(response.body.msg).toBe('Not found');
