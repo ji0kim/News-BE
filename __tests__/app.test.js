@@ -36,3 +36,27 @@ describe('topics', () => {
 			});
 	});
 });
+describe('articles', () => {
+	test('200, respond with an array of obj when requested /api/articles', () => {
+		return request(app)
+			.get('/api/articles')
+			.expect(200)
+			.then((response) => {
+				expect(response.body.articles).toBeInstanceOf(Object);
+				expect(response.body.articles.length).toBe(12);
+				response.body.articles.forEach((article) => {
+					expect(article).toMatchObject({
+						article_id: expect.any(Number),
+						created_at: expect.any(String),
+						votes: expect.any(Number),
+						body: expect.any(String),
+						author: expect.any(String),
+						title: expect.any(String),
+						topic: expect.any(String),
+					});
+				});
+			});
+	});
+});
+
+
