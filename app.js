@@ -14,6 +14,15 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
+	const sqlErrCodes = ['22P02'];
+	if (sqlErrCodes.includes(err.code)) {
+		res.status(400).send({ msg: 'Bad request' });
+	} else {
+		next(err);
+	}
+});
+
+app.use((err, req, res, next) => {
 	console.log(err);
 	res.status(500).send({ msg: 'Internal server error' });
 });

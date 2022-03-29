@@ -8,7 +8,7 @@ exports.selectArticles = () => {
 	});
 };
 exports.selectArticleById = (article_id) => {
-	const queryTxt = format('SELECT * FROM articles WHERE article_id = $1');
+  const queryTxt = format('SELECT * FROM articles WHERE article_id = $1');
 	return db.query(queryTxt, [article_id]).then((result) => {
 		return result.rows[0];
 	});
