@@ -58,5 +58,22 @@ describe('articles', () => {
 			});
 	});
 });
-
+describe('articles', () => {
+	test('200, respond with an obj when requested /api/articles/article_id', () => {
+		return request(app)
+			.get('/api/articles/1')
+			.expect(200)
+			.then((response) => {
+				expect(response.body.article).toMatchObject({
+					article_id: 1,
+					title: 'Living in the shadow of a great man',
+					topic: 'mitch',
+					author: 'butter_bridge',
+					body: 'I find this existence challenging',
+					created_at: '2020-07-09T20:11:00.000Z',
+					votes: 100,
+				});
+			});
+	});
+});
 
