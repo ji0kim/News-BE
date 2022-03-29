@@ -17,6 +17,7 @@ describe('topics', () => {
 			.get('/api/topics')
 			.expect(200)
 			.then((response) => {
+				expect(response.body.topics.length).toBe(3);
 				expect(response.body.topics).toBeInstanceOf(Object);
 				response.body.topics.forEach((topic) => {
 					expect(topic).toMatchObject({
@@ -35,4 +36,3 @@ describe('topics', () => {
 			});
 	});
 });
-
