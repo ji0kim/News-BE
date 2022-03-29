@@ -3,6 +3,7 @@ const app = require('../app');
 const request = require('supertest');
 const seed = require('../db/seeds/seed');
 const testData = require('../db/data/test-data');
+const { response } = require('../app');
 
 beforeEach(() => {
 	return seed(testData);
@@ -11,7 +12,7 @@ afterAll(() => {
 	return db.end();
 });
 
-describe('topics', () => {
+describe('/api/topics', () => {
 	test('200 /api/topics responds with an array of topics', () => {
 		return request(app)
 			.get('/api/topics')
@@ -36,8 +37,8 @@ describe('topics', () => {
 			});
 	});
 });
-describe('articles', () => {
-	test('200, respond with an array of obj when requested /api/articles', () => {
+describe('/api/articles', () => {
+	test('200 - Success : respond with an array of obj', () => {
 		return request(app)
 			.get('/api/articles')
 			.expect(200)
@@ -58,8 +59,8 @@ describe('articles', () => {
 			});
 	});
 });
-describe('articles', () => {
-	test('200, respond with an obj when requested /api/articles/article_id', () => {
+describe.only('/api/articles/article_id', () => {
+	test('200 - Success : respond with an obj', () => {
 		return request(app)
 			.get('/api/articles/1')
 			.expect(200)
@@ -73,6 +74,14 @@ describe('articles', () => {
 					created_at: '2020-07-09T20:11:00.000Z',
 					votes: 100,
 				});
+			});
+	});
+	test('400 - Bad request : When article_id is not an integer', () => {
+		return request(app)
+			.get('/api/articles/:not_an_integer')
+			.expect(400)
+			.then((response) => {
+				expect(response.body.msg).toBe('Bad request');
 			});
 	});
 });
