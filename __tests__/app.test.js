@@ -12,7 +12,7 @@ afterAll(() => {
 });
 
 describe('topics', () => {
-	test('200 /api/topics', () => {
+	test('200 /api/topics responds with an array of topics', () => {
 		return request(app)
 			.get('/api/topics')
 			.expect(200)
@@ -26,12 +26,13 @@ describe('topics', () => {
 				});
 			});
 	});
-	test('404 /api/*', () => {
+	test('404 /api/* when user requested non-existing path, respond with Not found ', () => {
 		return request(app)
-			.get('/*')
+			.get('/api/not_a_path')
 			.expect(404)
 			.then((response) => {
 				expect(response.body.msg).toBe('Not found');
 			});
 	});
 });
+
