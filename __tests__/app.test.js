@@ -59,7 +59,7 @@ describe('/api/articles', () => {
 			});
 	});
 });
-describe.only('/api/articles/article_id', () => {
+describe('/api/articles/article_id', () => {
 	test('200 - Success : respond with an obj', () => {
 		return request(app)
 			.get('/api/articles/1')
@@ -82,6 +82,14 @@ describe.only('/api/articles/article_id', () => {
 			.expect(400)
 			.then((response) => {
 				expect(response.body.msg).toBe('Bad request');
+			});
+	});
+	test("404 - Not found : When article_id doesn't exist", () => {
+		return request(app)
+			.get('/api/articles/10000000')
+			.expect(404)
+			.then((response) => {
+				expect(response.body.msg).toBe('Not found');
 			});
 	});
 });
