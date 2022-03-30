@@ -5,7 +5,9 @@ exports.getArticles = (req, res, next) => {
 		.then((articles) => {
 			res.send({ articles });
 		})
-		.catch(next);
+		.catch((err) => {
+			next(err);
+		});
 };
 
 exports.getArticleById = (req, res, next) => {
@@ -14,5 +16,7 @@ exports.getArticleById = (req, res, next) => {
 		.then((article) => {
 			res.send({ article });
 		})
-		.catch(next);
+		.catch((err) => {
+			next(err);
+		});
 };
