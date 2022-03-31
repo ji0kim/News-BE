@@ -3,6 +3,7 @@ const app = require('../app');
 const request = require('supertest');
 const seed = require('../db/seeds/seed');
 const testData = require('../db/data/test-data');
+const jestSorted = require('jest-sorted');
 
 beforeEach(() => {
 	return seed(testData);
@@ -43,6 +44,7 @@ describe('GET /api/articles', () => {
 			.expect(200)
 			.then((response) => {
 				expect(response.body.articles).toBeInstanceOf(Array);
+				expect(response.body.articles).toBeSortedBy('created_at');
 				expect(response.body.articles.length).toBe(12);
 				response.body.articles.forEach((article) => {
 					expect(article).toMatchObject({
@@ -171,17 +173,20 @@ describe('GET /api/users', () => {
 			.expect(200)
 			.then((response) => {
 				expect(response.body.users).toBeInstanceOf(Array);
-				expect(response.body.users.length).toBe(4);
-        response.body.users.forEach((user) => {
-					expect(user).toEqual({
+				expect(response.body.users).toEqual([
+					{ username: 'butter_bridge' },
+					{ username: 'icellusedkars' },
+					{ username: 'rogersop' },
+					{ username: 'lurker' },
+				]);
+				response.body.users.forEach((user) => {
+					expect(user).toMatchObject({
 						username: expect.any(String),
-						name: expect.any(String),
-						avatar_url: expect.any(String),
 					});
 				});
 			});
 	});
-  test('404 - Not found', () => {
+	test('404 - Not found', () => {
 		return request(app)
 			.get('/api/unexisting_path')
 			.expect(404)
