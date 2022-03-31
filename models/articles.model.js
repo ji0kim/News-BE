@@ -21,7 +21,7 @@ exports.selectArticleById = (article_id) => {
 };
 
 exports.updateVoteById = (inc_votes, article_id) => {
-	const queryTxt = format(`
+  const queryTxt = format(`
   UPDATE articles
   SET votes = votes + $1
   WHERE article_id=$2

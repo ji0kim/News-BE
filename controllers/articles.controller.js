@@ -24,7 +24,11 @@ exports.getArticleById = (req, res, next) => {
 exports.patchArticleVoteById = (req, res, next) => {
 	const { inc_votes } = req.body;
 	const { article_id } = req.params;
-	updateVoteById(inc_votes, article_id).then((article) => {
-		res.status(200).send({ article });
-	});
+	updateVoteById(inc_votes, article_id)
+		.then((article) => {
+			res.status(200).send({ article });
+		})
+		.catch((err) => {
+			next(err);
+		});
 };

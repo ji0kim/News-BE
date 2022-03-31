@@ -24,7 +24,7 @@ app.use((err, req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-	const sqlErrCodes = ['22P02'];
+	const sqlErrCodes = ['22P02', '23502'];
 	if (sqlErrCodes.includes(err.code)) {
 		res.status(400).send({ msg: 'Bad request' });
 	} else {
