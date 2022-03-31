@@ -42,7 +42,7 @@ describe('GET /api/articles', () => {
 			.get('/api/articles')
 			.expect(200)
 			.then((response) => {
-				expect(response.body.articles).toBeInstanceOf(Object);
+				expect(response.body.articles).toBeInstanceOf(Array);
 				expect(response.body.articles.length).toBe(12);
 				response.body.articles.forEach((article) => {
 					expect(article).toMatchObject({
@@ -111,6 +111,23 @@ describe('PATCH /api/articles/article_id', () => {
 			});
 	});
 	test('200 - Success : update votes', () => {
+		return request(app)
+			.patch('/api/articles/1')
+			.send({ inc_votes: -100 })
+			.expect(200)
+			.then((response) => {
+				expect(response.body.article).toEqual({
+					article_id: 1,
+					title: 'Living in the shadow of a great man',
+					topic: 'mitch',
+					author: 'butter_bridge',
+					body: 'I find this existence challenging',
+					created_at: '2020-07-09T20:11:00.000Z',
+					votes: 0,
+				});
+			});
+	});
+  test('200 - Success : update votes', () => {
 		return request(app)
 			.patch('/api/articles/1')
 			.send({ inc_votes: -100 })
