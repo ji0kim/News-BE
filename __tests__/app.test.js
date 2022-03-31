@@ -127,7 +127,7 @@ describe('PATCH /api/articles/article_id', () => {
 				});
 			});
 	});
-	test.only('400 - Bad Request : Invalid format', () => {
+	test('400 - Bad Request : Invalid format', () => {
 		return request(app)
 			.patch('/api/articles/1')
 			.send({ inc_votes: 'aaa' })
@@ -136,10 +136,28 @@ describe('PATCH /api/articles/article_id', () => {
 				expect(response.body.msg).toBe('Bad request');
 			});
 	});
-	test.only('400 - Bad Request : Empty request', () => {
+	test('400 - Bad Request : Empty request', () => {
 		return request(app)
 			.patch('/api/articles/1')
 			.send({})
+			.expect(400)
+			.then((response) => {
+				expect(response.body.msg).toBe('Bad request');
+			});
+	});
+	test('404 - Not found : article not found with a proper request body', () => {
+		return request(app)
+			.patch('/api/articles/999')
+			.send({ inc_votes: 1 })
+			.expect(404)
+			.then((response) => {
+				expect(response.body.msg).toBe('Not found');
+			});
+	});
+	test('400 - Bad Request : Invalid format of article id with a proper request body', () => {
+		return request(app)
+			.patch('/api/articles/not_a_integer')
+			.send({ inc_votes: 1 })
 			.expect(400)
 			.then((response) => {
 				expect(response.body.msg).toBe('Bad request');
