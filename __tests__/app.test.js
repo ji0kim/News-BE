@@ -184,4 +184,12 @@ describe('GET /api/users', () => {
 				});
 			});
 	});
+  test('404 - Not found', () => {
+		return request(app)
+			.get('/api/unexisting_path')
+			.expect(404)
+			.then((response) => {
+				expect(response.body.msg).toBe('Not found');
+			});
+	});
 });
