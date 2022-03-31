@@ -44,7 +44,7 @@ describe('GET /api/articles', () => {
 			.expect(200)
 			.then((response) => {
 				expect(response.body.articles).toBeInstanceOf(Array);
-        expect(response.body.articles).toBeSorted({
+				expect(response.body.articles).toBeSorted({
 					key: 'created_at',
 					descending: true,
 				});
@@ -234,3 +234,24 @@ describe('GET /api/articles/:article_id (comment count)', () => {
 			});
 	});
 });
+describe('GET /api/articles/:article_id/comments', () => {
+	test('200 - Success : get an array of comments objects with article_id', () => {
+		return request(app)
+			.get('/api/articles/1/comments')
+			.expect(200)
+			.then((response) => {
+				expect(response.body.comments).toBeInstanceOf(Array);
+				response.body.comments.forEach((comment) => {
+					expect(comment).toMatchObject({
+						comment_id: expect.any(Number),
+						votes: expect.any(Number),
+						created_at: expect.any(String),
+						author: expect.any(String),
+						body: expect.any(String),
+					});
+				});
+			});
+	});
+});
+
+
