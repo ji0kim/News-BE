@@ -93,7 +93,7 @@ describe('GET /api/articles/article_id', () => {
 	});
 });
 describe('PATCH /api/articles/article_id', () => {
-	test('200 - Success : update votes', () => {
+	test('200 - Success : increment votes', () => {
 		return request(app)
 			.patch('/api/articles/1')
 			.send({ inc_votes: 1 })
@@ -110,7 +110,7 @@ describe('PATCH /api/articles/article_id', () => {
 				});
 			});
 	});
-	test('200 - Success : update votes', () => {
+	test('200 - Success : decrement votes', () => {
 		return request(app)
 			.patch('/api/articles/1')
 			.send({ inc_votes: -100 })
@@ -127,21 +127,22 @@ describe('PATCH /api/articles/article_id', () => {
 				});
 			});
 	});
-  test('200 - Success : update votes', () => {
+	test.only('400 - Bad Request : Invalid format', () => {
 		return request(app)
 			.patch('/api/articles/1')
-			.send({ inc_votes: -100 })
-			.expect(200)
+			.send({ inc_votes: 'aaa' })
+			.expect(400)
 			.then((response) => {
-				expect(response.body.article).toEqual({
-					article_id: 1,
-					title: 'Living in the shadow of a great man',
-					topic: 'mitch',
-					author: 'butter_bridge',
-					body: 'I find this existence challenging',
-					created_at: '2020-07-09T20:11:00.000Z',
-					votes: 0,
-				});
+				expect(response.body.msg).toBe('Bad request');
+			});
+	});
+	test.only('400 - Bad Request : Empty request', () => {
+		return request(app)
+			.patch('/api/articles/1')
+			.send({})
+			.expect(400)
+			.then((response) => {
+				expect(response.body.msg).toBe('Bad request');
 			});
 	});
 });
