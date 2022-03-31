@@ -164,3 +164,24 @@ describe('PATCH /api/articles/article_id', () => {
 			});
 	});
 });
+describe('GET /api/users', () => {
+	test('200 - Success : Get users from the users table', () => {
+		return request(app)
+			.get('/api/users')
+			.expect(200)
+			.then((response) => {
+				expect(response.body.users).toBeInstanceOf(Array);
+				expect(response.body.users).toEqual([
+					{ username: 'butter_bridge' },
+					{ username: 'icellusedkars' },
+					{ username: 'rogersop' },
+					{ username: 'lurker' },
+				]);
+				response.body.users.forEach((user) => {
+					expect(user).toMatchObject({
+						username: expect.any(String),
+					});
+				});
+			});
+	});
+});
