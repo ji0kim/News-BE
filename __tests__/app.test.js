@@ -164,3 +164,29 @@ describe('PATCH /api/articles/article_id', () => {
 			});
 	});
 });
+describe('GET /api/users', () => {
+	test('200 - Success : Get users from the users table', () => {
+		return request(app)
+			.get('/api/users')
+			.expect(200)
+			.then((response) => {
+				expect(response.body.users).toBeInstanceOf(Array);
+				expect(response.body.users.length).toBe(4);
+        response.body.users.forEach((user) => {
+					expect(user).toEqual({
+						username: expect.any(String),
+						name: expect.any(String),
+						avatar_url: expect.any(String),
+					});
+				});
+			});
+	});
+  test('404 - Not found', () => {
+		return request(app)
+			.get('/api/unexisting_path')
+			.expect(404)
+			.then((response) => {
+				expect(response.body.msg).toBe('Not found');
+			});
+	});
+});
