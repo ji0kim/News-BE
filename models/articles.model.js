@@ -1,9 +1,8 @@
 const db = require('../db/connection');
 const format = require('pg-format');
-const { lastIndexOf } = require('../db/data/test-data/articles');
 
 exports.selectArticles = () => {
-	const queryTxt = 'SELECT * FROM articles';
+  const queryTxt = 'SELECT * FROM articles ORDER BY created_at DESC;';
 	return db.query(queryTxt).then((result) => {
 		return result.rows;
 	});

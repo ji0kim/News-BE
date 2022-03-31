@@ -44,7 +44,10 @@ describe('GET /api/articles', () => {
 			.expect(200)
 			.then((response) => {
 				expect(response.body.articles).toBeInstanceOf(Array);
-				expect(response.body.articles).toBeSortedBy('created_at');
+        expect(response.body.articles).toBeSorted({
+					key: 'created_at',
+					descending: true,
+				});
 				expect(response.body.articles.length).toBe(12);
 				response.body.articles.forEach((article) => {
 					expect(article).toMatchObject({
