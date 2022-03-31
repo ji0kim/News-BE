@@ -5,7 +5,6 @@ exports.selectUsers = () => {
 		const users = result.rows.map((user) => {
 			return { username: user.username };
 		});
-		console.log(users);
 		return users;
 	});
 };
