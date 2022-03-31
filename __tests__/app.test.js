@@ -252,6 +252,24 @@ describe('GET /api/articles/:article_id/comments', () => {
 				});
 			});
 	});
+	test("404 - Not Found : When article_id doesn't exist", () => {
+		return request(app)
+			.get('/api/articles/99999/comments')
+			.expect(404)
+			.then((res) => {
+				console.log(res.body);
+				expect(res.body.msg).toBe('Not found');
+			});
+	});
+	test('400 - Not Found : When article_id is in invalid format', () => {
+		return request(app)
+			.get('/api/articles/invalid_article_id/comments')
+			.expect(400)
+			.then((res) => {
+				console.log(res.body);
+				expect(res.body.msg).toBe('Bad request');
+			});
+	});
 });
 
 
