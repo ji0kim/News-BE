@@ -171,6 +171,7 @@ describe('GET /api/users', () => {
 			.expect(200)
 			.then((response) => {
 				expect(response.body.users).toBeInstanceOf(Array);
+				expect(response.body.users.length).toBe(4);
 				expect(response.body.users).toEqual([
 					{ username: 'butter_bridge' },
 					{ username: 'icellusedkars' },
