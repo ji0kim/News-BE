@@ -172,15 +172,11 @@ describe('GET /api/users', () => {
 			.then((response) => {
 				expect(response.body.users).toBeInstanceOf(Array);
 				expect(response.body.users.length).toBe(4);
-				expect(response.body.users).toEqual([
-					{ username: 'butter_bridge' },
-					{ username: 'icellusedkars' },
-					{ username: 'rogersop' },
-					{ username: 'lurker' },
-				]);
-				response.body.users.forEach((user) => {
-					expect(user).toMatchObject({
+        response.body.users.forEach((user) => {
+					expect(user).toEqual({
 						username: expect.any(String),
+						name: expect.any(String),
+						avatar_url: expect.any(String),
 					});
 				});
 			});
