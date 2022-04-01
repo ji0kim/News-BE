@@ -293,4 +293,13 @@ describe('POST /api/articles/:article_id/comments', () => {
 				});
 			});
 	});
+	test('400 - Bad request : When invalid article_id is given', () => {
+		return request(app)
+			.post('/api/articles/invalid_id/comments')
+			.send({ username: 'icellusedkars', body: 'New comment' })
+			.expect(400)
+			.then((res) => {
+				expect(res.body.msg).toBe('Bad request');
+			});
+	});
 });

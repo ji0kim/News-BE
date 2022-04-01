@@ -19,8 +19,12 @@ exports.InsertNewCommentById = (article_id, username, body) => {
 	($1, $2, $3)
 	RETURNING *;
 	`;
-	return db.query(queryTxt, [article_id, username, body]).then((result) => {
-		return result.rows[0];
+  return db.query(queryTxt, [article_id, username, body]).then((result) => {
+		if (result.rows.length === 0) {
+			return Promise.reject({ status: 404, msg: 'Not found' });
+		} else {
+			return result.rows[0];
+		}
 	});
 };
 
