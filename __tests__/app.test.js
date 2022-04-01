@@ -62,6 +62,20 @@ describe('GET /api/articles', () => {
 			});
 	});
 });
+describe('GET /api/articles?sort_by', () => {
+	test('200 - /api/articles?sort_by=date : respond with an array of articles object', () => {
+		return request(app)
+			.get('/api/articles?sort_by=votes')
+			.expect(200)
+			.then((response) => {
+				expect(response.body.articles).toBeSorted({
+					key: 'votes',
+					descending: true,
+				});
+			});
+	});
+});
+
 describe('GET /api/articles/article_id', () => {
 	test('200 - Success : respond with an obj', () => {
 		return request(app)
