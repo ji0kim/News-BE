@@ -1,7 +1,7 @@
 const db = require('../db/connection');
 
-exports.selectArticles = () => {
-	const queryTxt = 'SELECT * FROM articles ORDER BY created_at DESC;';
+exports.selectArticles = (sort_by = 'created_at') => {
+	const queryTxt = `SELECT * FROM articles ORDER BY ${sort_by} DESC;`;
 	return db.query(queryTxt).then((result) => {
 		return result.rows;
 	});
