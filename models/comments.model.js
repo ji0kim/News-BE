@@ -19,6 +19,9 @@ exports.InsertNewCommentById = (article_id, username, body) => {
 	($1, $2, $3)
 	RETURNING *;
 	`;
+  if (body.length === 0) {
+		return Promise.reject({ status: 400, msg: 'Bad request' });
+	}	
   return db.query(queryTxt, [article_id, username, body]).then((result) => {
 		if (result.rows.length === 0) {
 			return Promise.reject({ status: 404, msg: 'Not found' });

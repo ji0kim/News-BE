@@ -302,4 +302,13 @@ describe('POST /api/articles/:article_id/comments', () => {
 				expect(res.body.msg).toBe('Bad request');
 			});
 	});
+	test('400 - Bad request : Request with empty comment', () => {
+		return request(app)
+			.post('/api/articles/2/comments')
+			.send({ username: 'icellusedkars', body: '' })
+			.expect(400)
+			.then((res) => {
+				expect(res.body.msg).toBe('Bad request');
+			});
+	});
 });
