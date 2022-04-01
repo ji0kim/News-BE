@@ -3,6 +3,7 @@ const app = require('../app');
 const request = require('supertest');
 const seed = require('../db/seeds/seed');
 const testData = require('../db/data/test-data');
+const jestSorted = require('jest-sorted');
 
 beforeEach(() => {
 	return seed(testData);
@@ -43,6 +44,10 @@ describe('GET /api/articles', () => {
 			.expect(200)
 			.then((response) => {
 				expect(response.body.articles).toBeInstanceOf(Array);
+        expect(response.body.articles).toBeSorted({
+					key: 'created_at',
+					descending: true,
+				});
 				expect(response.body.articles.length).toBe(12);
 				response.body.articles.forEach((article) => {
 					expect(article).toMatchObject({
@@ -171,22 +176,61 @@ describe('GET /api/users', () => {
 			.expect(200)
 			.then((response) => {
 				expect(response.body.users).toBeInstanceOf(Array);
-				expect(response.body.users.length).toBe(4);
-        response.body.users.forEach((user) => {
-					expect(user).toEqual({
+				expect(response.body.users).toEqual([
+					{ username: 'butter_bridge' },
+					{ username: 'icellusedkars' },
+					{ username: 'rogersop' },
+					{ username: 'lurker' },
+				]);
+				response.body.users.forEach((user) => {
+					expect(user).toMatchObject({
 						username: expect.any(String),
-						name: expect.any(String),
-						avatar_url: expect.any(String),
 					});
 				});
 			});
 	});
-  test('404 - Not found', () => {
+	test('404 - Not found', () => {
 		return request(app)
 			.get('/api/unexisting_path')
 			.expect(404)
 			.then((response) => {
 				expect(response.body.msg).toBe('Not found');
+			});
+	});
+});
+describe('GET /api/articles/:article_id (comment count)', () => {
+	test('200 - Success : get the number of comment /api/articles/1 has', () => {
+		return request(app)
+			.get('/api/articles/1')
+			.expect(200)
+			.then((response) => {
+				expect(response.body.article).toEqual({
+					article_id: 1,
+					title: 'Living in the shadow of a great man',
+					topic: 'mitch',
+					author: 'butter_bridge',
+					created_at: '2020-07-09T20:11:00.000Z',
+					body: 'I find this existence challenging',
+					votes: 100,
+					comment_count: 11,
+				});
+			});
+	});
+	test('200 - Success : When article has no comment, show comment_count 0', () => {
+		return request(app)
+			.get('/api/articles/2')
+			.expect(200)
+			.then((response) => {
+				expect(response.body.article).toEqual({
+					article_id: 2,
+					title: 'Sony Vaio; or, The Laptop',
+					topic: 'mitch',
+					author: 'icellusedkars',
+					created_at: '2020-10-16T05:03:00.000Z',
+					body: 'Call me Mitchell. Some years ago—never mind how long precisely—having little or no money in my purse, and nothing particular to interest me on shore, I thought I would buy a laptop about a little and see the codey part of the world. It is a way I have of driving off the spleen and regulating the circulation. Whenever I find myself growing grim about the mouth; whenever it is a damp, drizzly November in my soul; whenever I find myself involuntarily pausing before coffin warehouses, and bringing up the rear of every funeral I meet; and especially whenever my hypos get such an upper hand of me, that it requires a strong moral principle to prevent me from deliberately stepping into the street, and methodically knocking people’s hats off—then, I account it high time to get to coding as soon as I can. This is my substitute for pistol and ball. With a philosophical flourish Cato throws himself upon his sword; I quietly take to the laptop. There is nothing surprising in this. If they but knew it, almost all men in their degree, some time or other, cherish very nearly the same feelings towards the the Vaio with me.',
+					votes: 0,
+					comment_count: 0,
+				});
 			});
 	});
 });
