@@ -3,7 +3,6 @@ const app = require('../app');
 const request = require('supertest');
 const seed = require('../db/seeds/seed');
 const testData = require('../db/data/test-data');
-const jestSorted = require('jest-sorted');
 
 beforeEach(() => {
 	return seed(testData);
@@ -277,5 +276,21 @@ describe('GET /api/articles/:article_id/comments', () => {
 			});
 	});
 });
-
-
+describe('POST /api/articles/:article_id/comments', () => {
+	test('201 - Created : Add a new comment', () => {
+		return request(app)
+			.post('/api/articles/2/comments')
+			.send({ username: 'icellusedkars', body: 'New comment' })
+			.expect(201)
+			.then((res) => {
+				expect(res.body.comment).toEqual({
+					article_id: 2,
+					author: 'icellusedkars',
+					body: 'New comment',
+					comment_id: 19,
+					created_at: expect.any(String),
+					votes: 0,
+				});
+			});
+	});
+});
