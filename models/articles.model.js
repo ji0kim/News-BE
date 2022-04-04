@@ -1,7 +1,11 @@
 const db = require('../db/connection');
 
-exports.selectArticles = () => {
-	const queryTxt = 'SELECT * FROM articles ORDER BY created_at DESC;';
+exports.selectArticles = (sort_by = 'created_at', order_by = 'DESC') => {
+	const validColumn = ['article_id', 'title', 'topic', 'author', 'body', 'created_at', 'votes'];
+	if (!validColumn.includes(sort_by)) {
+		return Promise.reject({ status: 400, msg: 'Invalid sort by' });
+	}
+	const queryTxt = `SELECT * FROM articles ORDER BY ${sort_by} ${order_by};`;
 	return db.query(queryTxt).then((result) => {
 		return result.rows;
 	});
