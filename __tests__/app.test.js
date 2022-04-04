@@ -37,7 +37,7 @@ describe('GET /api/topics', () => {
 	});
 });
 describe('GET /api/articles', () => {
-	test('200 - Success : respond with an array of obj', () => {
+	test("200 - Success : respond with an array of obj, Order by default by 'created_at'", () => {
 		return request(app)
 			.get('/api/articles')
 			.expect(200)
@@ -62,8 +62,8 @@ describe('GET /api/articles', () => {
 			});
 	});
 });
-describe('GET /api/articles?sort_by', () => {
-	test('200 - /api/articles?sort_by=date : respond with an array of articles object', () => {
+describe('GET /api/articles?queries', () => {
+	test('200 - /api/articles?sort_by=votes : respond with an array of articles object order by votes', () => {
 		return request(app)
 			.get('/api/articles?sort_by=votes')
 			.expect(200)
@@ -72,6 +72,14 @@ describe('GET /api/articles?sort_by', () => {
 					key: 'votes',
 					descending: true,
 				});
+			});
+	});
+	test('200 - /api/articles?sort_by=title : respond with an array of articles object ordered by title in descending order', () => {
+		return request(app)
+			.get('/api/articles?sort_by=title&&order_by=DESC')
+			.expect(200)
+			.then((response) => {
+				expect(response.body.articles).toBeSorted({ key: 'title', descending: true });
 			});
 	});
 });
@@ -311,6 +319,15 @@ describe('POST /api/articles/:article_id/comments', () => {
 		return request(app)
 			.post('/api/articles/invalid_id/comments')
 			.send({ username: 'icellusedkars', body: 'New comment' })
+			.expect(400)
+			.then((res) => {
+				expect(res.body.msg).toBe('Bad request');
+			});
+	});
+	test('400 - Bad request : Request with empty comment', () => {
+		return request(app)
+			.post('/api/articles/2/comments')
+			.send({ username: 'icellusedkars', body: '' })
 			.expect(400)
 			.then((res) => {
 				expect(res.body.msg).toBe('Bad request');
