@@ -356,4 +356,12 @@ describe.only('DELETE /api/comments/:comment_id', () => {
 	test('204 - Delete comment, respond with 204', () => {
 		return request(app).delete('/api/comments/1').expect(204);
 	});
+  test('404 - when comment_id does not exist', () => {
+		return request(app)
+			.delete('/api/comments/100000')
+			.expect(404)
+			.then((response) => {
+				expect(response.body.msg).toBe('Comment not found');
+			});
+	});
 });
