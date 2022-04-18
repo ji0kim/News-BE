@@ -82,6 +82,15 @@ describe('GET /api/articles?queries', () => {
 				expect(response.body.articles).toBeSorted({ key: 'title', descending: true });
 			});
 	});
+  test.only('200 - /api/articles?topic=cats : should be able to filter topics', () => {
+		return request(app)
+			.get(`/api/articles?topic=cats`)
+			.expect(200)
+			.then((res) => {
+				expect(res.body.articles).toBeInstanceOf(Array);
+				expect(res.body.articles.length).toBe(1);
+			});
+	});
 });
 
 describe('GET /api/articles/article_id', () => {

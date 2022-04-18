@@ -1,12 +1,27 @@
 const db = require('../db/connection');
 
-exports.selectArticles = (sort_by = 'created_at', order_by = 'DESC') => {
+exports.selectArticles = (sort_by = 'created_at', order_by = 'DESC', topic) => {
 	const validColumn = ['article_id', 'title', 'topic', 'author', 'body', 'created_at', 'votes'];
 	if (!validColumn.includes(sort_by)) {
 		return Promise.reject({ status: 400, msg: 'Invalid sort by' });
 	}
-	const queryTxt = `SELECT * FROM articles ORDER BY ${sort_by} ${order_by};`;
-	return db.query(queryTxt).then((result) => {
+	let queryTxt = `SELECT articles.*,
+  COUNT(comments.comment_id) AS comment_count
+  FROM articles
+  LEFT JOIN comments ON comments.article_id = articles.article_id`;
+	dbQueryParams = [];
+
+	if (topic) {
+		queryTxt += ` WHERE articles.topic ILIKE $1`;
+		dbQueryParams.push(topic);
+	}
+
+	queryTxt += `
+  GROUP BY articles.article_id
+  ORDER BY ${sort_by} ${order_by};
+  `;
+
+	return db.query(queryTxt, dbQueryParams).then((result) => {
 		return result.rows;
 	});
 };

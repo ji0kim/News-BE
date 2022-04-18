@@ -1,8 +1,8 @@
 const { selectArticles, selectArticleById, updateVoteById } = require('../models/articles.model.js');
 
 exports.getArticles = (req, res, next) => {
-  const { sort_by, order_by } = req.query;
-	selectArticles(sort_by, order_by)
+  const { sort_by, order_by, topic } = req.query;
+	selectArticles(sort_by, order_by, topic)
 		.then((articles) => {
 			res.send({ articles });
 		})
