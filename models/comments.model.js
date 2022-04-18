@@ -37,10 +37,10 @@ exports.removeCommentById = (comment_id) => {
     WHERE comment_id = $1
     RETURNING *;
     `;
-	return db.query(queryTxt, [comment_id]).then((result) => {
+  return db.query(queryTxt, [comment_id]).then((result) => {
+		if (!result.rowCount) {
+			return Promise.reject({ status: 404, msg: 'Comment not found' });
+		}
 		return result.rowCount;
-		// if (!result.rowCount) {
-
-		// }
 	});
 };
