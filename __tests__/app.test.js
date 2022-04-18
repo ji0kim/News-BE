@@ -10,7 +10,16 @@ beforeEach(() => {
 afterAll(() => {
 	return db.end();
 });
-
+describe('GET /api', () => {
+	test('200 /api responds with JSON endpoints', () => {
+		return request(app)
+			.get('/api')
+			.expect(200)
+			.then((response) => {
+				expect(response.body).toBeInstanceOf(Object);
+			});
+	});
+});
 describe('GET /api/topics', () => {
 	test('200 /api/topics responds with an array of topics', () => {
 		return request(app)
@@ -82,7 +91,7 @@ describe('GET /api/articles?queries', () => {
 				expect(response.body.articles).toBeSorted({ key: 'title', descending: true });
 			});
 	});
-  test('200 - /api/articles?topic=cats : should be able to filter topics', () => {
+	test('200 - /api/articles?topic=cats : should be able to filter topics', () => {
 		return request(app)
 			.get(`/api/articles?topic=cats`)
 			.expect(200)
@@ -92,7 +101,6 @@ describe('GET /api/articles?queries', () => {
 			});
 	});
 });
-
 describe('GET /api/articles/article_id', () => {
 	test('200 - Success : respond with an obj', () => {
 		return request(app)
@@ -352,11 +360,11 @@ describe('POST /api/articles/:article_id/comments', () => {
 			});
 	});
 });
-describe.only('DELETE /api/comments/:comment_id', () => {
+describe('DELETE /api/comments/:comment_id', () => {
 	test('204 - Delete comment, respond with 204', () => {
 		return request(app).delete('/api/comments/1').expect(204);
 	});
-  test('404 - when comment_id does not exist', () => {
+	test('404 - when comment_id does not exist', () => {
 		return request(app)
 			.delete('/api/comments/100000')
 			.expect(404)

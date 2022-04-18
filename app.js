@@ -4,9 +4,10 @@ const { getTopics } = require('./controllers/topics.controller');
 const { getArticles, getArticleById, patchArticleVoteById } = require('./controllers/articles.controller.js');
 const { getUsers } = require('./controllers/users.controller.js');
 const { getCommentsById, postCommentById, deleteCommentById } = require('./controllers/comments.controller');
+const { getApi } = require('./controllers/app.controllers.js');
 
 app.use(express.json());
-
+app.get('/api', getApi);
 app.get('/api/topics', getTopics);
 app.get('/api/articles', getArticles);
 app.get('/api/articles/:article_id', getArticleById);
