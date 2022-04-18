@@ -82,7 +82,7 @@ describe('GET /api/articles?queries', () => {
 				expect(response.body.articles).toBeSorted({ key: 'title', descending: true });
 			});
 	});
-  test.only('200 - /api/articles?topic=cats : should be able to filter topics', () => {
+  test('200 - /api/articles?topic=cats : should be able to filter topics', () => {
 		return request(app)
 			.get(`/api/articles?topic=cats`)
 			.expect(200)
@@ -350,5 +350,10 @@ describe('POST /api/articles/:article_id/comments', () => {
 			.then((res) => {
 				expect(res.body.msg).toBe('Bad request');
 			});
+	});
+});
+describe.only('DELETE /api/comments/:comment_id', () => {
+	test('204 - Delete comment, respond with 204', () => {
+		return request(app).delete('/api/comments/1').expect(204);
 	});
 });
