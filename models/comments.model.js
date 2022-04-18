@@ -31,3 +31,16 @@ exports.InsertNewCommentById = (article_id, username, body) => {
 	});
 };
 
+exports.removeCommentById = (comment_id) => {
+	const queryTxt = `
+    DELETE FROM comments
+    WHERE comment_id = $1
+    RETURNING *;
+    `;
+	return db.query(queryTxt, [comment_id]).then((result) => {
+		return result.rowCount;
+		// if (!result.rowCount) {
+
+		// }
+	});
+};
