@@ -1,7 +1,7 @@
 const db = require('../db/connection');
 
 exports.selectArticles = (sort_by = 'created_at', order_by = 'DESC', topic) => {
-	const validColumn = ['article_id', 'title', 'topic', 'author', 'body', 'created_at', 'votes'];
+	const validColumn = ['article_id', 'title', 'topic', 'author', 'body', 'created_at', 'votes', 'comments'];
 	if (!validColumn.includes(sort_by)) {
 		return Promise.reject({ status: 400, msg: 'Invalid sort by' });
 	}
