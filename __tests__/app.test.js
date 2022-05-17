@@ -91,6 +91,16 @@ describe('GET /api/articles?queries', () => {
 				expect(response.body.articles).toBeSorted({ key: 'title', descending: true });
 			});
 	});
+	test('200 - /api/articles?sort_by=comment_count : respond with an array of articles object ordered by comment_count in descending order', () => {
+		return request(app)
+			.get('/api/articles?sort_by=comment_count&&order_by=DESC')
+			.expect(200)
+			.then((response) => {
+				expect(response.body.articles).toBeSorted('comment_count', {
+					descending: true,
+				});
+			});
+	});
 	test('200 - /api/articles?topic=cats : should be able to filter topics', () => {
 		return request(app)
 			.get(`/api/articles?topic=cats`)
